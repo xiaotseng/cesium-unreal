@@ -157,6 +157,14 @@ TSharedRef<SWidget> CesiumPanel::BasicQuickAddPanel() {
       -1,
       "",
       -1});
+  quickAddPanel->AddItem(QuickAddItem{
+      QuickAddItemType::CARTO_SELECTION,
+      "Cartographic Selection",
+      "A spline that can be used to mark out an area for clipping or material effects.",
+      "",
+      -1,
+      "",
+      -1});
   return quickAddPanel.ToSharedRef();
 }
 

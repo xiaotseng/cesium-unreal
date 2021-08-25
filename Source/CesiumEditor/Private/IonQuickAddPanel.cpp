@@ -5,6 +5,7 @@
 #include "CesiumEditor.h"
 #include "CesiumIonClient/Connection.h"
 #include "CesiumIonRasterOverlay.h"
+#include "CesiumCartographicSelection.h"
 #include "Editor.h"
 #include "PropertyCustomizationHelpers.h"
 #include "Styling/SlateStyle.h"
@@ -33,7 +34,7 @@ void IonQuickAddPanel::Construct(const FArguments& InArgs) {
                          .Text(InArgs._Title)]] +
        SVerticalBox::Slot()
            .VAlign(VAlign_Top)
-           .Padding(FMargin(5.0f, 0.0f, 5.0f, 20.0f))[this->QuickAddList()]];
+           .Padding(FMargin(5.0f, 0.0f, 5.0f, 5.0f))[this->QuickAddList()]];
 }
 
 void IonQuickAddPanel::AddItem(const QuickAddItem& item) {
@@ -310,6 +311,19 @@ void IonQuickAddPanel::AddDynamicPawnToLevel() {
   }
 }
 
+void IonQuickAddPanel::AddCartoSelectionToLevel() {
+  UWorld* pCurrentWorld = GEditor->GetEditorWorldContext().World();
+  ULevel* pCurrentLevel = pCurrentWorld->GetCurrentLevel();
+
+  GEditor->AddActor(
+      pCurrentLevel,
+      ACesiumCartographicSelection::StaticClass(),
+      FTransform(),
+      false,
+      RF_Public | RF_Transactional);
+  
+}
+
 void IonQuickAddPanel::AddBlankTilesetToLevel() {
   UWorld* pCurrentWorld = GEditor->GetEditorWorldContext().World();
   ULevel* pCurrentLevel = pCurrentWorld->GetCurrentLevel();
@@ -347,6 +361,9 @@ void IonQuickAddPanel::AddItemToLevel(TSharedRef<QuickAddItem> item) {
     this->_itemsBeingAdded.erase(item->name);
   } else if (item->type == QuickAddItemType::DYNAMIC_PAWN) {
     AddDynamicPawnToLevel();
+    this->_itemsBeingAdded.erase(item->name);
+  } else if (item->type == QuickAddItemType::CARTO_SELECTION) {
+    AddCartoSelectionToLevel();
     this->_itemsBeingAdded.erase(item->name);
   }
 }
