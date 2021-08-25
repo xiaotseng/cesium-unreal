@@ -2,10 +2,10 @@
 
 #include "IonQuickAddPanel.h"
 #include "Cesium3DTileset.h"
+#include "CesiumCartographicSelection.h"
 #include "CesiumEditor.h"
 #include "CesiumIonClient/Connection.h"
 #include "CesiumIonRasterOverlay.h"
-#include "CesiumCartographicSelection.h"
 #include "Editor.h"
 #include "PropertyCustomizationHelpers.h"
 #include "Styling/SlateStyle.h"
@@ -321,7 +321,6 @@ void IonQuickAddPanel::AddCartoSelectionToLevel() {
       FTransform(),
       false,
       RF_Public | RF_Transactional);
-  
 }
 
 void IonQuickAddPanel::AddBlankTilesetToLevel() {
