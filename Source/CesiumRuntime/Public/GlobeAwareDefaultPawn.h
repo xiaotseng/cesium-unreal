@@ -194,6 +194,7 @@ private:
   void _moveAlongViewAxis(EAxis::Type axis, float Val);
   void _moveAlongVector(const FVector& axis, float Val);
   void _interruptFlight();
+  void _endFlight();
 
   /**
    * @brief Advance the camera flight based on the given time delta.

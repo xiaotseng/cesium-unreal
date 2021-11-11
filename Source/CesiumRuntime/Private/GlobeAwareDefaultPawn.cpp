@@ -91,6 +91,10 @@ void AGlobeAwareDefaultPawn::FlyToLocationECEF(
     return;
   }
 
+  if (!Controller) {
+    return;
+  }
+
   // Compute source location in ECEF
   glm::dvec3 ECEFSource = this->GlobeAnchor->GetECEF();
 
@@ -251,7 +255,9 @@ void AGlobeAwareDefaultPawn::_handleFlightStep(float DeltaSeconds) {
     return;
   }
 
+  // If the pawn is no longer possessed, end flight
   if (!Controller) {
+    this->_endFlight();
     return;
   }
 
@@ -263,13 +269,13 @@ void AGlobeAwareDefaultPawn::_handleFlightStep(float DeltaSeconds) {
     return;
   }
 
-  // If we reached the end, set actual destination location and orientation
+  // If we reached the end, set actual destination location and orientation, and
+  // end flight
   if (this->_currentFlyTime >= this->FlyToDuration) {
     const glm::dvec3& finalPoint = _keypoints.back();
     this->GlobeAnchor->MoveToECEF(finalPoint);
     Controller->SetControlRotation(this->_flyToDestinationRotation.Rotator());
-    this->_bFlyingToLocation = false;
-    this->_currentFlyTime = 0.0;
+    this->_endFlight();
     return;
   }
 
@@ -383,4 +389,10 @@ void AGlobeAwareDefaultPawn::_interruptFlight() {
   FRotator currentRotator = Controller->GetControlRotation();
   currentRotator.Roll = 0.0;
   Controller->SetControlRotation(currentRotator);
+}
+
+// Reset flight variables
+void AGlobeAwareDefaultPawn::_endFlight() {
+  this->_bFlyingToLocation = false;
+  this->_currentFlyTime = 0.0;
 }
