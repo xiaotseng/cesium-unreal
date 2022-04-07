@@ -28,7 +28,7 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "iOS")
 
     find_package(Threads REQUIRED)
 endif()
-
+set(C_FLAGS_WARNINGS "/W4 /WX-")
 # Rename sqlite3* symbols to cesium_sqlite3* so they don't conflict with UE's sqlite3,
 # which has a bunch of limitations and is not considered public.
 set(PRIVATE_CESIUM_SQLITE ON)
@@ -64,6 +64,9 @@ elseif (${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
   # between compilation units using different versions of that flag. We compile cesium-native
   # with this same option to avoid super-dodgy and hard to debug issues.
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zp8")
+  #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /Wv:18 /WX-")
+  #set(C_FLAGS_WARNINGS "/W4 /WX-")
+  add_compile_options(/wd4819)
 endif()
 
 add_subdirectory(cesium-native)
